@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
 
     first_name: { type: String, trim: true },
     last_name: { type: String, trim: true },
-    address: { type: String, trim: true },        
+    address: { type: String, trim: true },
     role: { type: String, enum: ["USER", "ADMIN","SUPER ADMIM", "VIEWER"], default: "USER" },
   }, {
     timestamps: true,
