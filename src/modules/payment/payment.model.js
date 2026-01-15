@@ -9,4 +9,4 @@ const paymentSchema = new mongoose.Schema({
   date: Date,
 });
 
-export default mongoose.model("Payment", paymentSchema);
+export const Payment = mongoose.model("Payment", paymentSchema);

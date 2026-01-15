@@ -13,4 +13,4 @@ const orderItemSchema = new mongoose.Schema({
   price: Number,
 });
 
-export default mongoose.model("OrderItem", orderItemSchema);
+export const OrderItem = mongoose.model("OrderItem", orderItemSchema);

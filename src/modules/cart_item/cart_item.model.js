@@ -23,4 +23,4 @@ const cartItemSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("CartItem", cartItemSchema);
+export const CartItem = mongoose.model("CartItem", cartItemSchema);
