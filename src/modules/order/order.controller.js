@@ -1,9 +1,5 @@
 import { Order } from "./order.model.js"
 
-
-
-
-
 export const createOrder = async(req, res, next) => {
     const { order_id, user_id,status} = req.body;
 
@@ -30,4 +26,5 @@ export const createOrder = async(req, res, next) => {
     return next(error);
   }
 };
+
 

@@ -31,8 +31,9 @@ export const updateCategory = async (req, res, next) => {
 export const deleteCategory = async (req, res, next) => {
   try {
     const doc = await Category.findByIdAndDelete(req.params.id);
-    if (!doc) return res.status(404).json({ success: false, message: "Category not found" });
-    return res.status(200).json({ success: true, message: "Deleted" });
+    if (!doc) 
+      return res.status(404).json({ success: false, message: "Category not found" });
+      return res.status(200).json({ success: true, message: "Deleted" });
   } catch (err) {
     next(err);
   }
