@@ -1,23 +1,15 @@
 import { Order } from "./order.model";
 
 export const createOrder = async (req, res, next) => {
+  const { order_id, user_id, status } = req.body;
+
   try {
-    const order = await Order.find();
-    return res.status(200).json({
-import { Order } from "./order.model.js"
-
-export const createOrder = async(req, res, next) => {
-    const { order_id, user_id,status} = req.body;
-
-    try {
-
     if (!user_id) {
       return res.status(400).json({
         success: false,
         message: "user_id is required",
       });
     }
-
 
     const order = await Order.create({
       user_id,
@@ -38,14 +30,6 @@ export const updateOrder = async (req, res, next) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid order id",
-      });
-    }
-
-    const validStatuses = ["PENDING", "IN-TRANSIT", "DELIVERED", "CANCELLED"];
     if (!status) {
       return res.status(400).json({
         success: false,
@@ -53,6 +37,7 @@ export const updateOrder = async (req, res, next) => {
       });
     }
 
+    const validStatuses = ["PENDING", "IN-TRANSIT", "DELIVERED", "CANCELLED"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
@@ -60,10 +45,17 @@ export const updateOrder = async (req, res, next) => {
       });
     }
 
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order id",
+      });
+    }
+
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
       { status },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedOrder) {
