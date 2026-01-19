@@ -31,47 +31,55 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const updateAddress = async (req, res, next) => {
+export const delAddress = async (req, res, next) => {
   const { id } = req.params;
+
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      { $unset: { address: "" } },
+      { new: true }
+    )
+
+    if (!updateUser) {
+      const error = new Error("User not found");
+      error.status = 404;
+      return next(error);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Address deleted successfully",
+      data: updateUser
+    })
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const updateAddress = async (req, res, next) => {
+  const userId = req.user.id;
   const { address } = req.body;
 
   try {
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid user id",
-      });
-    }
-
-  
     const trimmed = String(address || "").trim();
     if (!trimmed) {
-      return res.status(400).json({
-        success: false,
-        message: "address is required",
-      });
+      return res.status(400).json({ success: false, message: "address is required" });
     }
 
-    
     const updated = await User.findByIdAndUpdate(
-      id,
+      userId,
       { address: trimmed },
       { new: true }
     );
 
     if (!updated) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    return res.status(200).json({
-      success: true,
-      data: updated,
-    });
+    return res.status(200).json({ success: true, data: updated });
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
 

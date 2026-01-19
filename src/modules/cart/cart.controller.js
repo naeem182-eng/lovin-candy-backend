@@ -2,6 +2,30 @@ import { Cart } from "./cart.model.js";
 import { Product } from "../product/product.model.js";
 import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
 
+export const updateCart = async (req, res, next) => {
+  const { id } = req.params;
+  
+  const body = req.body;
+
+  try {
+    const update = await Cart.findOneAndUpdate(id, body);
+
+    if (!update) {
+      const error = new Error("Item not found...");
+
+      return next(error);
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: update,
+    })
+  } catch (error) {
+    error.status = 500;
+    next(error);
+  }
+}
+
 export const addItemToCart = async (req, res) => {
   try {
     const { productId, quantity = 1 } = req.body;
@@ -59,5 +83,38 @@ export const addItemToCart = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getCartID = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const doc = await Cart.findById(id)
+    if (!doc) {
+      const error = new Error("Cart not found");
+      return next(error);
+    }
+    return res.status(200).json({
+      success: true,
+      data: doc,
+    });
+  } catch (error) {
+    error.status = 500;
+    error.name = error.name || "DatabaseError";
+    error.message = error.message || "Failed to get a cart";
+    return next(error);
+  }
+};
+
+export const getCart = async (req, res, next) => {
+  try {
+    const carts = await Cart.find()
+    return res.status(200).json({
+      success: true,
+      data: carts,
+    });
+  } catch (error) {
+    return next(error);
   }
 };

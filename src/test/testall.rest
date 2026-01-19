@@ -1,0 +1,70 @@
+### users test
+GET http://localhost:3000/api/users
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "username": "test6",
+    "email": "test6@example.com",
+    "password": "test6",
+    "first_name": "test6",
+    "last_name": "test6",
+    "address": "test6",
+    "role": "USER"
+}
+
+###
+DELETE http://localhost:3000/api/users/696bc23131cc181ac0e8bef6
+
+
+###
+PUT http://localhost:3000/api/users/696bc23131cc181ac0e8bef6
+Content-Type: application/json
+
+{
+    "address": "test6-updated"
+}
+
+###
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+    "email": "test6@example.com",
+    "password": "test6"
+}
+
+### products test
+GET http://localhost:3000/api/products
+
+###
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+    "name": "Test Candy Bar",
+    "description": "Delicious chocolate candy bar",
+    "price": 1.99,
+    "stock": 100,
+    "category": "Candy"
+}
+
+###
+GET http://localhost:3000/api/products/696bc9b752c05ee12dbfc8d9
+
+###
+DELETE http://localhost:3000/api/products/696bc9b752c05ee12dbfc8d9
+
+### cart test
+GET http://localhost:3000/api/cart/
+
+###
+POST http://localhost:3000/api/cart/items
+Content-Type: application/json
+
+{
+    "productId": "696a8b614e45f84fac3fe934",
+    "quantity": 2
+}

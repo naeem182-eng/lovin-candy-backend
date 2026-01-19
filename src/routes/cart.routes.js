@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { addItemToCart } from "../modules/cart/cart.controller.js";
+import { updateCart, addItemToCart, getCartID, getCart } from "../modules/cart/cart.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
-const router = Router();
+export const router = Router();
+
+router.patch("/:id", updateCart);
 
 // guest
 router.post("/items", addItemToCart);
@@ -10,6 +12,7 @@ router.post("/items", addItemToCart);
 // login
 router.post("/items/me", auth, addItemToCart);
 
-export default router;
+router.get("/", getCart);
 
+router.get("/:id", getCartID);
 

@@ -14,3 +14,6 @@ Content-Type: application/json
     "role": "USER"
 
 }
+
+###
+GET http://localhost:3000/api/products
