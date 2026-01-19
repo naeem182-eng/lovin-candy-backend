@@ -1,4 +1,6 @@
 import { Product } from "./product.model.js";
+import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
+
 import mongoose from "mongoose";
 
 export const getProductId = async (req, res, next) => {
@@ -51,6 +53,39 @@ export const getProducts = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+export const getProductById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product id",
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { $inc: { popularity_score: POPULARITY_SCORE.VIEW } },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (err) {
+    next(err)
   }
 };
 
@@ -107,6 +142,53 @@ export const createProduct = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+export const updateProductPopularity = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { type } = req.body;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product id",
+      });
+    }
+
+    if (!type || !POPULARITY_SCORE[type]) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid popularity type",
+        allow: Object.keys(POPULARITY_SCORE),
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { $inc: { popularity_score: POPULARITY_SCORE[type] } },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        productId: product._id,
+        popularity_score: product.popularity_score,
+        increasedBy: POPULARITY_SCORE[type],
+        type,
+      },
+    });
+  } catch (err) {
+    next(err);
   }
 };
 

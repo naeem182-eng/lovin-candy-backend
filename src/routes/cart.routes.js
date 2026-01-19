@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { updateCart, addItemToCart, getCartID, getCart } from "../modules/cart/cart.controller.js";
+import { updateCart, addItemToCart, getCartID, getCart, deleteCart } from "../modules/cart/cart.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
 export const router = Router();
@@ -16,3 +16,4 @@ router.get("/", getCart);
 
 router.get("/:id", getCartID);
 
+router.delete("/:id", deleteCart);

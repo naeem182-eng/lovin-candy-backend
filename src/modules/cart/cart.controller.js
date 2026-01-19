@@ -1,5 +1,6 @@
 import { Cart } from "./cart.model.js";
 import { Product } from "../product/product.model.js";
+import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
 
 export const updateCart = async (req, res, next) => {
   const { id } = req.params;
@@ -51,7 +52,7 @@ export const addItemToCart = async (req, res) => {
     }
 
     const existingItem = cart.items.find(
-      (item) => item.product.toString() === productId
+      (item) => item.product.toString() === productId,
     );
 
     if (existingItem) {
@@ -62,11 +63,16 @@ export const addItemToCart = async (req, res) => {
         quantity,
         price: product.price,
       });
+
+      // 🔥 update popularity เฉพาะตอน add ใหม่
+      await Product.findByIdAndUpdate(productId, {
+        $inc: { popularityScore: POPULARITY_SCORE.ADD_TO_CART },
+      });
     }
 
     cart.totalPrice = cart.items.reduce(
       (sum, item) => sum + item.quantity * item.price,
-      0
+      0,
     );
 
     await cart.save();
@@ -110,5 +116,18 @@ export const getCart = async (req, res, next) => {
     });
   } catch (error) {
     return next(error);
+  }
+};
+
+export const deleteCart = async (req, res, next) => {
+  try {
+    const doc = await Cart.findByIdAndDelete(req.params.id);
+    if (!doc)
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
+    return res.status(200).json({ success: true, message: "Deleted" });
+  } catch (err) {
+    next(err);
   }
 };

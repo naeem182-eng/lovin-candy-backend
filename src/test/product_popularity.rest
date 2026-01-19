@@ -1,0 +1,36 @@
+// Test instead of PRODUCT_ID = 696897940f34cb9f5d50c48f
+
+### ORDER_SUCCESS popularity
+PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+Content-Type: application/json
+
+{
+  "type": "VIEW"
+}
+
+
+### ADD_TO_CART popularity
+PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+Content-Type: application/json
+
+{
+  "type": "ADD_TO_CART"
+}
+
+
+### ORDER_SUCCESS popularity
+PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+Content-Type: application/json
+
+{
+  "type": "ORDER_SUCCESS"
+}
+
+
+### INVALID TYPE TEST
+PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+Content-Type: application/json
+
+{
+  "type": "LIKE"
+}

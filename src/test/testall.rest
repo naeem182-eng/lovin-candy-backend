@@ -52,7 +52,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/api/products/696bc9b752c05ee12dbfc8d9
+GET http://localhost:3000/api/products/696897940f34cb9f5d50c48f
 
 ###
 DELETE http://localhost:3000/api/products/696bc9b752c05ee12dbfc8d9
@@ -65,6 +65,9 @@ POST http://localhost:3000/api/cart/items
 Content-Type: application/json
 
 {
-    "productId": "696a8b614e45f84fac3fe934",
-    "quantity": 2
+    "productId": "696897940f34cb9f5d50c48f",
+    "quantity": 4
 }
+
+###
+DELETE http://localhost:3000/api/cart/696a9c74e65437a9091e146e
