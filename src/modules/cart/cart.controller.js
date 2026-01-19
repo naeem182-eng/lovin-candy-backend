@@ -3,7 +3,7 @@ import { Product } from "../product/product.model.js";
 
 export const updateCart = async (req, res, next) => {
   const { id } = req.params;
-  
+
   const body = req.body;
 
   try {
@@ -18,12 +18,12 @@ export const updateCart = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       data: update,
-    })
+    });
   } catch (error) {
     error.status = 500;
     next(error);
   }
-}
+};
 
 export const addItemToCart = async (req, res) => {
   try {
@@ -84,7 +84,7 @@ export const getCartID = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const doc = await Cart.findById(id)
+    const doc = await Cart.findById(id);
     if (!doc) {
       const error = new Error("Cart not found");
       return next(error);
@@ -103,7 +103,7 @@ export const getCartID = async (req, res, next) => {
 
 export const getCart = async (req, res, next) => {
   try {
-    const carts = await Cart.find()
+    const carts = await Cart.find();
     return res.status(200).json({
       success: true,
       data: carts,

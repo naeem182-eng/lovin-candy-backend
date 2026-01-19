@@ -1,12 +1,11 @@
 import jwt from "jsonwebtoken";
-import { User } from "./users.model.js"
+import { User } from "./users.model.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-
 export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find()
+    const users = await User.find();
     return res.status(200).json({
       success: true,
       data: users,
@@ -17,14 +16,37 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const createUser = async (req, res, next) => {
-  const { username, email, password, first_name, last_name, address, role } = req.body;
+  const { username, email, password, first_name, last_name, address, role } =
+    req.body;
 
   try {
-    const doc = await User.create({ username, email, password, first_name, last_name, address, role });
+    const doc = await User.create({
+      username,
+      email,
+      password,
+      first_name,
+      last_name,
+      address,
+      role,
+    });
 
     return res.status(201).json({
       success: true,
       data: doc,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getAddress = async (req, res, next) => {
+  try {
+    const { userId } = req.params; // ดึงมาจากข้อมูล 1 คน?
+
+    const addresses = await Delivery.find({ user_id: userId });
+    return res.status(200).json({
+      success: true,
+      data: addresses,
     });
   } catch (error) {
     return next(error);
@@ -39,7 +61,7 @@ export const delAddress = async (req, res, next) => {
       id,
       { $unset: { address: "" } },
       { new: true }
-    )
+    );
 
     if (!updateUser) {
       const error = new Error("User not found");
@@ -50,12 +72,12 @@ export const delAddress = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Address deleted successfully",
-      data: updateUser
-    })
+      data: updateUser,
+    });
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const updateAddress = async (req, res, next) => {
   const userId = req.user.id;
@@ -64,7 +86,9 @@ export const updateAddress = async (req, res, next) => {
   try {
     const trimmed = String(address || "").trim();
     if (!trimmed) {
-      return res.status(400).json({ success: false, message: "address is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "address is required" });
     }
 
     const updated = await User.findByIdAndUpdate(
@@ -74,7 +98,9 @@ export const updateAddress = async (req, res, next) => {
     );
 
     if (!updated) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     return res.status(200).json({ success: true, data: updated });
@@ -137,4 +163,3 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
-
