@@ -1,6 +1,7 @@
 import { Order } from "./order.model.js";
 import mongoose from "mongoose";
 import { Product } from "../product/product.model.js";
+import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
 
 export const createOrder = async (req, res, next) => {
   const { items, status } = req.body;
@@ -112,6 +113,14 @@ export const updateOrder = async (req, res, next) => {
       });
     }
 
+    if (status === "DELIVERED") {
+  for (const item of updatedOrder.items) {
+    await Product.findByIdAndUpdate(item.product_id, {
+      $inc: { popularity_score: POPULARITY_SCORE.ORDER_SUCCESS },
+    });
+    }
+    }
+
     return res.status(200).json({
       success: true,
       data: updatedOrder,
@@ -158,7 +167,7 @@ export const getMyOrders = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const orders = await Order.find({ user: userId });
+    const orders = await Order.find({ user_id: userId });
 
     return res.status(200).json({
       success: true,

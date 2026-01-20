@@ -44,7 +44,7 @@ export const addItemToCart = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // 🔑 cart ของ user (หรือ guest = user:null)
+    //  cart ของ user (หรือ guest = user:null)
     let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
@@ -68,7 +68,7 @@ export const addItemToCart = async (req, res) => {
         price: product.price,
       });
 
-      // 🔥 update popularity เฉพาะตอน add ใหม่
+      //  update popularity เฉพาะตอน add ใหม่
       await Product.findByIdAndUpdate(productId, {
         $inc: { popularityScore: POPULARITY_SCORE.ADD_TO_CART },
       });
