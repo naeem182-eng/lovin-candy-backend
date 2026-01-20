@@ -12,7 +12,7 @@ router.get("/me", auth, me);
 
 router.delete("/:id", delAddress);
 
-router.put("/:id", updateAddress);
+router.put("/address", auth, updateAddress);
 
 router.post("/login", login);
 

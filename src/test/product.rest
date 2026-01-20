@@ -8,3 +8,4 @@ Content-Type: application/json
   "stock": 100,
   "category": "Jelly"
 }
+
