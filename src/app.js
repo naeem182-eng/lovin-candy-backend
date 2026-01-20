@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.use("/api", apiRoutes);
 
-// error handling
+
 app.use((req, res, next) => {
   const error = new Error (`Not found: ${req.method} ${req.originalUrl}`)
   error.name = "NotFoundError"
