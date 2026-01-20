@@ -202,14 +202,44 @@ export const updateProductPopularity = async (req, res, next) => {
 };
 
 export const updateProduct = async (req, res, next) => {
-  try {
-      const doc = await Product.findByIdAndUpdate(
-        req.params.id, 
-        req.body, { new: true });
-      if (!doc) 
-        return res.status(404).json({ success: false, message: "Product not found" });
-      return res.status(200).json({ success: true, data: doc });
-    } catch (err) {
-      next(err);
+  const { id } = req.params;
+  const body = req.body;
+
+  if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product id",
+      });
     }
-}
+    
+  try {
+    const doc = await Product.findByIdAndUpdate(id, body, { new: true });
+
+    if (!doc) {
+      const error = new Error("Product not found");
+      return next(error);
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: doc,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getPopularProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find()
+      .sort({ popularity_score: -1 })
+      .limit(10);
+
+    return res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};

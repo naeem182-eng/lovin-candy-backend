@@ -1,7 +1,7 @@
 ### users test
 GET http://localhost:3000/api/users
 
-###
+### Create User Test
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
@@ -15,11 +15,11 @@ Content-Type: application/json
     "role": "USER"
 }
 
-###
+### Get User by ID Test
 DELETE http://localhost:3000/api/users/696bc23131cc181ac0e8bef6
 
 
-###
+### Update User Test
 PUT http://localhost:3000/api/users/696bc23131cc181ac0e8bef6
 Content-Type: application/json
 
@@ -27,7 +27,7 @@ Content-Type: application/json
     "address": "test6-updated"
 }
 
-###
+### Login Test
 POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
@@ -36,10 +36,13 @@ Content-Type: application/json
     "password": "test6"
 }
 
+### Logout Test
+POST http://localhost:3000/api/users/logout
+
 ### products test
 GET http://localhost:3000/api/products
 
-###
+### Create Product Test
 POST http://localhost:3000/api/products
 Content-Type: application/json
 
@@ -51,10 +54,10 @@ Content-Type: application/json
     "category": "chocolate"
 }
 
-###
-GET http://localhost:3000/api/products/696897940f34cb9f5d50c48f
+### Get Product by ID Test
+GET http://localhost:3000/api/products/696e7878dc53bb780fcc29b7
 
-###
+### Update Product Test
 PUT http://localhost:3000/api/products/696e7878dc53bb780fcc29b7
 Content-Type: application/json
 
@@ -63,28 +66,31 @@ Content-Type: application/json
     "stock": 60
 }
 
-###
+### Delete Product Test
 DELETE http://localhost:3000/api/products/696e7794fbab4b8cfd05c370
 
 ### cart test
 GET http://localhost:3000/api/cart/
 
-###
+### Add to Cart Test
 POST http://localhost:3000/api/cart/items
 Content-Type: application/json
 
 {
     "productId": "696e7878dc53bb780fcc29b7",
-    "quantity": 5
+    "quantity": 7
 }
 
-###
-DELETE http://localhost:3000/api/cart/696a9c74e65437a9091e146e
+### Delete Cart Test
+DELETE http://localhost:3000/api/cart/696de6a2508df3c219d325b9
+
+### Delete Cart Item Test
+DELETE http://localhost:3000/api/cart/items/696ea1f4d3f
 
 ### category test
 GET http://localhost:3000/api/products/categories
 
-###
+### Create Category Test
 POST http://localhost:3000/api/products/categories
 Content-Type: application/json
 
@@ -93,7 +99,7 @@ Content-Type: application/json
     "description": "Tasty chocolate candies"
 }
 
-###
+### GET Category Test
 PUT http://localhost:3000/api/products/categories/696e7268a620c20e72c2b998
 Content-Type: application/json
 
@@ -101,8 +107,91 @@ Content-Type: application/json
     "description": "Delicious gummy candies"
 }
 
-###
+### Delete Category Test
 DELETE http://localhost:3000/api/products/categories/696e7268a620c20e72c2b998
 
-###
+### Category Filter Test
 GET http://localhost:3000/api/products?category=CHOCOLATE
+
+### GET Popular Products
+GET http://localhost:3000/api/products/popular
+
+### Create Order Test
+POST http://localhost:3000/api/orders
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "product_id": "696e7878dc53bb780fcc29b7",
+            "quantity": 1
+        }
+    ]
+}
+
+### Get Orders Test
+GET http://localhost:3000/api/orders
+
+### Get Order by ID Test
+GET http://localhost:3000/api/orders/696ef62e9904ee9e9b078c03
+
+### Update Order Test
+PUT http://localhost:3000/api/orders/696ef62e9904ee9e
+Content-Type: application/json
+
+{
+    "status": "COMPLETED"
+}
+
+### Delete Order Test
+DELETE http://localhost:3000/api/orders/696f2263036b93a283bda809
+
+### User Profile Test
+GET http://localhost:3000/api/users/me
+
+### --------------------------------------------------------------
+
+# @name login
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+    "email": "test6@example.com",
+    "password": "test6"
+}
+
+### บรรทัดนี้คือการดึง Token มาเก็บไว้ในตัวแปรชื่อ 'token'
+@token = {{login.response.body.token}}
+
+### -------------------------------------------
+
+### ทดสอบดึงข้อมูล Profile (จะใช้ Token อัตโนมัติจากด้านบน)
+GET http://localhost:3000/api/users/me
+Authorization: Bearer {{token}}
+
+### -------------------------------------------
+
+### ทดสอบดึง Order ของตัวเอง
+GET http://localhost:3000/api/orders/my-orders
+Authorization: Bearer {{token}}
+
+### ---------------------------------------------------------
+
+### Create Order Test
+POST http://localhost:3000/api/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "items": [
+        {
+            "product_id": "696e7878dc53bb780fcc29b7",
+            "quantity": 1
+        }
+    ]
+}
+
+### 2. เทส Delete Order (ห้ามมีบรรทัดว่างระหว่าง DELETE กับ Authorization)
+DELETE http://localhost:3000/api/orders/696f2263036b93a283bda809
+Authorization: Bearer {{token}}
+

@@ -163,3 +163,71 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+export const me = async (req, res, next) => {
+  try {
+    console.log("User Data from Middleware:", req.user);
+
+    const userId = req.user?.id || req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "No user information found in request (Check Middleware)",
+      });
+    }
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found in database",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// REGISTER
+export const register = async (req, res, next) => {
+  const { email, password, confirmPassword } = req.body;
+
+  try {
+    if (password !== confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Passwords do not match" 
+      });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "Email already exists" });
+    }
+
+    const newUser = await User.create({
+      email,
+      password,
+      username: `user_${Math.floor(1000 + Math.random() * 9000)}`,
+      role: "USER"
+    });
+    return res.status(201).json({
+    success: true,
+    message: "Registration successful",
+    data: {
+      id: newUser._id,
+      email: newUser.email,
+      username: newUser.username
+  }
+});
+  } catch (error) {
+    next(error);
+  }
+};

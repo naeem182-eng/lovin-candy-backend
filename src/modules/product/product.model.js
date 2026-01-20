@@ -7,7 +7,10 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     stock: { type: Number, default: 0 },
     category: { type: String, ref: "Category" },
-    popularity_score: { type: Number, default:0},
+    popularity_score: { 
+      type: Number, 
+      default:0,
+      index: true},
   },
   { timestamps: true }
 );

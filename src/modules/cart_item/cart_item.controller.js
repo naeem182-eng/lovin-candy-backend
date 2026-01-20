@@ -1,3 +1,6 @@
+import { CartItem } from "./cart_item.model.js";
+import mongoose from "mongoose";
+
 export const deleteCartItem = async (req, res, next) => {
   try {
     const { id } = req.params;
