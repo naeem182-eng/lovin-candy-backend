@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, delAddress, getUsers, login, me, register, updateAddress } from "../modules/users/users.controller.js";
+import { createUser, delAddress, getUsers, login, me, register, updateAddress, updateProfile } from "../modules/users/users.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js";
 
@@ -20,5 +20,7 @@ router.post("/login", login);
 router.post("/register", register);
 
 router.get("/", auth, isAdmin, getUsers);
+
+router.put("/update-profile", auth, updateProfile);
 
 router.delete("/:id", auth, isAdmin, delAddress);

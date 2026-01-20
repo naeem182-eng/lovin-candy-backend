@@ -231,3 +231,20 @@ export const register = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateProfile = async (req, res, next) => {
+  const userId = req.user.id;
+  const { username, first_name, last_name, email, phone } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, first_name, last_name, email, phone },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({ success: true, data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
