@@ -11,4 +11,8 @@ Content-Type: application/json
 }
 
 ### Delete Product Test
-DELETE http://localhost:3000/api/products/696e7794fbab4b8cfd05c370
+DELETE http://localhost:3000/api/products/697045695656ead08646bc0f
+
+### GET product
+GET http://localhost:3000/api/products
+Content-Type: application/json

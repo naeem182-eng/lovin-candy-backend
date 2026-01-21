@@ -153,33 +153,6 @@ export const updateAddress = async (req, res, next) => {
   }
 };
 
-export const delAddress = async (req, res, next) => {
-  const userId = req.user?.id;
-
-  try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $unset: { address: "" } },
-      { new: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Address deleted successfully",
-      data: user,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 //  LOGIN
 export const login = async (req, res, next) => {
   const { email, password } = req.body;

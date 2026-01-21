@@ -35,7 +35,7 @@ export const getProductId = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
   try {
     const page = Math.max(1, Number(req.query.page || 1));
-    const limit = Math.min(50, Math.max(1, Number(req.query.limit || 10)));
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit || 20)));
 
     const q = (req.query.q || "").trim();
     const category = (req.query.category || "").trim();
@@ -211,7 +211,7 @@ export const updateProduct = async (req, res, next) => {
         message: "Invalid product id",
       });
     }
-
+    
   try {
     const doc = await Product.findByIdAndUpdate(id, body, { new: true });
 
