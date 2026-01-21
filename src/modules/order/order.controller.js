@@ -1,6 +1,7 @@
 import { Order } from "./order.model.js";
 import mongoose from "mongoose";
 import { Product } from "../product/product.model.js";
+import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
 
 export const createOrder = async (req, res, next) => {
   const { items, status } = req.body;
@@ -15,23 +16,30 @@ export const createOrder = async (req, res, next) => {
       });
     }
 
-    const productIds = items.map(item => item.product_id);
+    const productIds = items.map((item) => item.product_id);
     const dbProducts = await Product.find({ _id: { $in: productIds } });
 
     let total_price = 0;
     const finalItems = [];
 
     for (const item of items) {
-      const productInfo = dbProducts.find(p => p._id.toString() === item.product_id.toString());
+      const productInfo = dbProducts.find(
+        (p) => p._id.toString() === item.product_id.toString(),
+      );
 
       if (!productInfo) {
-        return res.status(404).json({ success: false, message: `Product ${item.product_id} not found` });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: `Product ${item.product_id} not found`,
+          });
       }
 
       if (productInfo.stock < item.quantity) {
-        return res.status(400).json({ 
-          success: false, 
-          message: `สินค้า ${productInfo.name} เหลือไม่พอ (คงเหลือ: ${productInfo.stock})` 
+        return res.status(400).json({
+          success: false,
+          message: `สินค้า ${productInfo.name} เหลือไม่พอ (คงเหลือ: ${productInfo.stock})`,
         });
       }
 
@@ -41,11 +49,11 @@ export const createOrder = async (req, res, next) => {
         product_id: productInfo._id,
         name: productInfo.name,
         price: productInfo.price,
-        quantity: item.quantity
+        quantity: item.quantity,
       });
 
       await Product.findByIdAndUpdate(productInfo._id, {
-        $inc: { stock: -item.quantity }
+        $inc: { stock: -item.quantity },
       });
     }
 
@@ -55,7 +63,7 @@ export const createOrder = async (req, res, next) => {
       total_price,
       status: status || "PENDING",
     });
-    
+
     return res.status(201).json({
       success: true,
       data: order,
@@ -105,6 +113,14 @@ export const updateOrder = async (req, res, next) => {
       });
     }
 
+    if (status === "DELIVERED") {
+  for (const item of updatedOrder.items) {
+    await Product.findByIdAndUpdate(item.product_id, {
+      $inc: { popularity_score: POPULARITY_SCORE.ORDER_SUCCESS },
+    });
+    }
+    }
+
     return res.status(200).json({
       success: true,
       data: updatedOrder,
@@ -151,7 +167,7 @@ export const getMyOrders = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const orders = await Order.find({ user: userId });
+    const orders = await Order.find({ user_id: userId });
 
     return res.status(200).json({
       success: true,

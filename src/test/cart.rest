@@ -20,3 +20,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjhhNWEyN
   "quantity": 2
 }
 
+
+### cart test
+GET http://localhost:3000/api/cart/
+
+### Add to Cart Test
+POST http://localhost:3000/api/cart/items
+Content-Type: application/json
+
+{
+    "productId": "696e7878dc53bb780fcc29b7",
+    "quantity": 7
+}
+
+### Delete Cart Test
+DELETE http://localhost:3000/api/cart/696de6a2508df3c219d325b9
+
+### Delete Cart Item Test
+DELETE http://localhost:3000/api/cart/items/696ea1f4d3f

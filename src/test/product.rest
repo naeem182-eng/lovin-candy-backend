@@ -6,6 +6,9 @@ Content-Type: application/json
   "name": "Test Chocolate Jelly",
   "price": 125,
   "stock": 100,
-  "category": "Jelly"
+  "category": "Jelly",
+  "imageUrl": "https://res.cloudinary.com/dcwlgjz6z/image/upload/v1768922766/Cotton_Candy_Lollipop_Bag_asy4vc.png"
 }
 
+### Delete Product Test
+DELETE http://localhost:3000/api/products/696e7794fbab4b8cfd05c370

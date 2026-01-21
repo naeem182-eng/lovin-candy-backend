@@ -125,7 +125,7 @@ export const createProduct = async (req, res, next) => {
       price,
       stock,
       category,
-      images,
+      imageUrl,
     } = req.body;
 
     // validation
@@ -142,7 +142,7 @@ export const createProduct = async (req, res, next) => {
       price,
       stock,
       category: category ? category.toUpperCase() : "GENERAL", // ⭐ default ทาง logic
-      images,
+      imageUrl,
     });
 
     return res.status(201).json({

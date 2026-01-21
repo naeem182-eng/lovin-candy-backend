@@ -144,7 +144,8 @@ Content-Type: application/json
 }
 
 ### Delete Order Test
-DELETE http://localhost:3000/api/orders/696f2263036b93a283bda809
+DELETE http://localhost:3000/api/orders/696f1ea1ce5aef6cfff46a9b
+Authorization: Bearer {{token}}
 
 ### User Profile Test
 GET http://localhost:3000/api/users/me
@@ -195,3 +196,26 @@ Authorization: Bearer {{token}}
 DELETE http://localhost:3000/api/orders/696f2263036b93a283bda809
 Authorization: Bearer {{token}}
 
+### create address
+POST http://localhost:3000/api/users/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjhhNWEyN2RjOTBhMzU3YzM1Y2ZiOSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4OTMxOTU3LCJleHAiOjE3Njk1MzY3NTd9.g_RKmlidxoXklfmx_MOPQ-R5QKu8yiYrmyQ6ftG5zHA
+Content-Type: application/json
+
+{
+  "address": "123 ถนนสุขุมวิท กรุงเทพ"
+}
+
+### update address
+PUT http://localhost:3000/api/users/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjhhNWEyN2RjOTBhMzU3YzM1Y2ZiOSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4OTMxOTU3LCJleHAiOjE3Njk1MzY3NTd9.g_RKmlidxoXklfmx_MOPQ-R5QKu8yiYrmyQ6ftG5zHA
+Content-Type: application/json
+
+{
+  "address": "456 ถนนพหลโยธิน กรุงเทพ"
+}
+
+
+### delete address
+DELETE http://localhost:3000/api/users/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjhhNWEyN2RjOTBhMzU3YzM1Y2ZiOSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4OTMxOTU3LCJleHAiOjE3Njk1MzY3NTd9.g_RKmlidxoXklfmx_MOPQ-R5QKu8yiYrmyQ6ftG5zHA
+Content-Type: application/json

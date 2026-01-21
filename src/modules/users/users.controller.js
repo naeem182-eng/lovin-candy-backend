@@ -39,6 +39,76 @@ export const createUser = async (req, res, next) => {
   }
 };
 
+export const createAddress = async (req, res, next) => {
+  const { id } = req.params;
+  const { address } = req.body;
+
+  try {
+    if (!address) {
+      return res.status(400).json({
+        success: false,
+        message: "address is required",
+      });
+    }
+
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      { address },
+      { new: true }
+    );
+
+    if (!updateUser) {
+      const error = new Error("User not found");
+      error.status = 404;
+      return next(error);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Address created successfully",
+      data: updateUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const delAddress = async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user?.id;
+  const { address } = req.body;
+
+  try {
+    if (!address || typeof address !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "address is required",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { address },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "Address created successfully",
+      data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAddress = async (req, res, next) => {
   try {
     const { userId } = req.params; // ดึงมาจากข้อมูล 1 คน?
@@ -50,32 +120,6 @@ export const getAddress = async (req, res, next) => {
     });
   } catch (error) {
     return next(error);
-  }
-};
-
-export const delAddress = async (req, res, next) => {
-  const { id } = req.params;
-
-  try {
-    const updateUser = await User.findByIdAndUpdate(
-      id,
-      { $unset: { address: "" } },
-      { new: true }
-    );
-
-    if (!updateUser) {
-      const error = new Error("User not found");
-      error.status = 404;
-      return next(error);
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Address deleted successfully",
-      data: updateUser,
-    });
-  } catch (error) {
-    next(error);
   }
 };
 
@@ -104,6 +148,33 @@ export const updateAddress = async (req, res, next) => {
     }
 
     return res.status(200).json({ success: true, data: updated });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const delAddress = async (req, res, next) => {
+  const userId = req.user?.id;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $unset: { address: "" } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Address deleted successfully",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
@@ -227,6 +298,23 @@ export const register = async (req, res, next) => {
       username: newUser.username
   }
 });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProfile = async (req, res, next) => {
+  const userId = req.user.id;
+  const { username, first_name, last_name, email, phone } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, first_name, last_name, email, phone },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
     next(error);
   }
