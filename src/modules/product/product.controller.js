@@ -37,8 +37,16 @@ export const getProducts = async (req, res, next) => {
     const page = Math.max(1, Number(req.query.page || 1));
     const limit = Math.min(50, Math.max(1, Number(req.query.limit || 20)));
 
-    const q = (req.query.q || "").trim();
-    const category = (req.query.category || "").trim();
+    const q =
+  typeof req.query.q === "string"
+    ? req.query.q.trim()
+    : "";
+
+const category =
+  typeof req.query.category === "string"
+    ? req.query.category.trim()
+    : "";
+
 
     const filter = {};
     if (q) filter.name = { $regex: q, $options: "i" };

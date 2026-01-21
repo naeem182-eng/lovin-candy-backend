@@ -3,11 +3,11 @@ POST http://localhost:3000/api/products
 Content-Type: application/json
 
 {
-  "name": "Blue Raspberry Lollipop Bag",
-  "price": 159,
+  "name": "XmasSetL",
+  "price": 359,
   "stock": 100,
-  "category": "Jelly",
-  "imageUrl": "https://res.cloudinary.com/dcwlgjz6z/image/upload/v1768922766/Cotton_Candy_Lollipop_Bag_asy4vc.png"
+  "category": "specialset",
+  "imageUrl": "https://res.cloudinary.com/dcwlgjz6z/image/upload/v1768924851/XmasSetL_mrfcgw.png"
 }
 
 ### Delete Product Test
