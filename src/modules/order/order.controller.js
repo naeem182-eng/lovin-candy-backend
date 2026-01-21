@@ -50,6 +50,7 @@ export const createOrder = async (req, res, next) => {
         name: productInfo.name,
         price: productInfo.price,
         quantity: item.quantity,
+        imageUrl: productInfo.imageUrl,
       });
 
       await Product.findByIdAndUpdate(productInfo._id, {
@@ -167,7 +168,12 @@ export const getMyOrders = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const orders = await Order.find({ user_id: userId });
+    const orders = await Order.find({ user_id: userId })
+    .populate({
+        path: 'items.product_id',
+        select: 'imageUrl'
+      })
+    .sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

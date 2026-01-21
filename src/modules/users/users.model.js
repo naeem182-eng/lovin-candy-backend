@@ -8,7 +8,15 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, select: false },
     first_name: { type: String, trim: true },
     last_name: { type: String, trim: true },
-    address: { type: String, trim: true },
+    address: {
+      fullName: { type: String, default: "" },
+      phone: { type: String, default: "" },
+      streetAddress: { type: String, default: "" },
+      province: { type: String, default: "" },
+      district: { type: String, default: "" },
+      subDistrict: { type: String, default: "" },
+      postalCode: { type: String, default: "" }
+  },
     phone: { type: String, default: "" },
     role: {
       type: String,

@@ -17,7 +17,7 @@ router.post("/", createUser);
 
 router.post("/address", auth, createAddress);
 
-router.put("/address", auth, updateAddress);
+router.put("/update-address", auth, updateAddress);
 
 router.delete("/address", auth, delAddress);
 

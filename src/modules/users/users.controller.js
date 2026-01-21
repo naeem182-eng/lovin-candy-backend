@@ -128,16 +128,16 @@ export const updateAddress = async (req, res, next) => {
   const { address } = req.body;
 
   try {
-    const trimmed = String(address || "").trim();
-    if (!trimmed) {
-      return res
-        .status(400)
-        .json({ success: false, message: "address is required" });
+    if (!address || typeof address !== 'object') {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Address data is required as an object" 
+      });
     }
 
     const updated = await User.findByIdAndUpdate(
       userId,
-      { address: trimmed },
+      { address: address },
       { new: true }
     );
 
