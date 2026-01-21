@@ -11,18 +11,22 @@ router.post("/register", register);
 
 router.get("/me", auth, me);
 
-router.get("/", getUsers);
-
-router.post("/", createUser);
-
 router.post("/address", auth, createAddress);
 
 router.put("/update-address", auth, updateAddress);
 
-router.delete("/address", auth, delAddress);
+router.get("/", getUsers);
 
-router.get("/", auth, isAdmin, getUsers);
+router.post("/", createUser);
+
 
 router.put("/update-profile", auth, updateProfile);
+
+
+router.delete("/address", auth, delAddress);
+
+
+
+router.get("/", auth, isAdmin, getUsers);
 
 router.delete("/:id", auth, isAdmin, delAddress);
