@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { router as apiRoutes } from "./routes/index.js";
+import categoryRoutes from "./routes/category.routes.js";
 
 export const app = express();
 
@@ -19,6 +20,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api", apiRoutes);
+
+app.use("/api/categories", categoryRoutes);
 
 
 app.use((req, res, next) => {
