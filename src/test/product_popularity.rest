@@ -1,7 +1,7 @@
 // Test of PRODUCT_ID = 696897940f34cb9f5d50c48f
 
 ### View popularity
-PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+PUT http://localhost:3000/api/products/69719f093ffda758d34e9408/popular
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 
 ### ADD_TO_CART popularity
-PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+PUT http://localhost:3000/api/products/69719f093ffda758d34e9408/popular
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 
 ### ORDER_SUCCESS popularity
-PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+PUT http://localhost:3000/api/products/69719b9f3ffda758d34e93ef/popular
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 
 
 ### INVALID TYPE TEST
-PUT http://localhost:3000/api/products/696897940f34cb9f5d50c48f/popular
+PUT http://localhost:3000/api/products/69719f093ffda758d34e9408f/popular
 Content-Type: application/json
 
 {

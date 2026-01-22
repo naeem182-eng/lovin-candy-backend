@@ -3,15 +3,27 @@ POST http://localhost:3000/api/products
 Content-Type: application/json
 
 {
-  "name": "XmasSetL",
-  "price": 359,
+  "name": "Ivorysilk/100g",
+  "price": 129,
   "stock": 100,
-  "category": "specialset",
-  "imageUrl": "https://res.cloudinary.com/dcwlgjz6z/image/upload/v1768924851/XmasSetL_mrfcgw.png"
+  "category": "chocolate",
+  "imageUrl": "https://res.cloudinary.com/dcwlgjz6z/image/upload/v1769074652/Ivorysilk_ukb4u5.jpg"
 }
 
+
 ### Delete Product Test
-DELETE http://localhost:3000/api/products/697045695656ead08646bc0f
+DELETE http://localhost:3000/api/products/6970483f5656ead08646bc23
+
+
+
+### Update Product Test
+PUT http://localhost:3000/api/products/696e7878dc53bb780fcc29b7
+Content-Type: application/json
+
+{
+    "price": 6.49,
+    "stock": 60
+}
 
 ### GET product
 GET http://localhost:3000/api/products
