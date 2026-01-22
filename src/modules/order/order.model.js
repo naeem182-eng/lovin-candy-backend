@@ -4,12 +4,12 @@ const orderSchema = new mongoose.Schema ({
   user_id: { type: mongoose.Schema.Types.ObjectId , ref: "User" },
   items: [
     {
-      product_id: { type: mongoose.Schema.Types.ObjectId , ref: "Product" },
+      product_id: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
       name: String,
       price: Number,
       imageUrl: String,
       quantity: { type: Number, required: true, min: 1 },
-
+      isCustom: { type: Boolean, default: false },
     }
   ],
   total_price: { type: Number, required: true },
@@ -17,6 +17,15 @@ const orderSchema = new mongoose.Schema ({
     type: String,
     enum: ["PENDING", "IN-TRANSIT", "DELIVERED", "CANCELLED"],
     default: "PENDING",
+  },
+  shippingAddress: {
+    fullName: String,
+    phone: String,
+    streetAddress: String,
+    province: String,
+    district: String,
+    subDistrict: String,
+    postalCode: String,
   },
 },
   {

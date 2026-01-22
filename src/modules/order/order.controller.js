@@ -4,83 +4,69 @@ import { Product } from "../product/product.model.js";
 import { POPULARITY_SCORE } from "../../constants/popularity_score.js";
 
 export const createOrder = async (req, res, next) => {
-  const { items, status } = req.body;
-
+  const { items, status, shippingAddress } = req.body;
   const userIdFromToken = req.user.id;
 
   try {
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "items array is required",
-      });
+      return res.status(400).json({ success: false, message: "items array is required" });
     }
 
-    const productIds = items.map((item) => {
-  if (!mongoose.Types.ObjectId.isValid(item.product_id)) {
-    throw {
-      status: 400,
-      message: `Invalid product_id: ${item.product_id}`,
-    };
-  }
-  return item.product_id;
-});
-
-const dbProducts = await Product.find({
-  _id: { $in: productIds },
-});
-
+    const productIds = items.map((item) => item.product_id);
+    const dbProducts = await Product.find({ _id: { $in: productIds } });
 
     let total_price = 0;
     const finalItems = [];
 
     for (const item of items) {
-      const productInfo = dbProducts.find(
-        (p) => p._id.toString() === item.product_id.toString(),
-      );
+      const isCustom = !mongoose.isValidObjectId(item.product_id);
 
-      if (!productInfo) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: `Product ${item.product_id} not found`,
-          });
-      }
+      if (isCustom) {
+        total_price += (item.price || 0) * item.quantity;
+        finalItems.push({
+          product_id: null,
+          name: item.name || "Custom Candy",
+          price: item.price,
+          quantity: item.quantity,
+          imageUrl: item.imageUrl,
+          isCustom: true,
+          customDetails: item.details || {}
+        });
+      } else {
+        const productInfo = dbProducts.find(p => p._id.toString() === item.product_id.toString());
 
-      if (productInfo.stock < item.quantity) {
-        return res.status(400).json({
-          success: false,
-          message: `สินค้า ${productInfo.name} เหลือไม่พอ (คงเหลือ: ${productInfo.stock})`,
+        if (!productInfo) {
+          return res.status(404).json({ success: false, message: `Product ${item.product_id} not found` });
+        }
+
+        if (productInfo.stock < item.quantity) {
+          return res.status(400).json({ success: false, message: `สินค้า ${productInfo.name} เหลือไม่พอ` });
+        }
+
+        total_price += productInfo.price * item.quantity;
+        finalItems.push({
+          product_id: productInfo._id,
+          name: productInfo.name,
+          price: productInfo.price,
+          quantity: item.quantity,
+          imageUrl: productInfo.imageUrl,
+        });
+
+        await Product.findByIdAndUpdate(productInfo._id, {
+          $inc: { stock: -item.quantity },
         });
       }
-
-      total_price += productInfo.price * item.quantity;
-
-      finalItems.push({
-        product_id: productInfo._id,
-        name: productInfo.name,
-        price: productInfo.price,
-        quantity: item.quantity,
-        imageUrl: productInfo.imageUrl,
-      });
-
-      await Product.findByIdAndUpdate(productInfo._id, {
-        $inc: { stock: -item.quantity },
-      });
     }
 
     const order = await Order.create({
       user_id: userIdFromToken,
       items: finalItems,
       total_price,
+      shippingAddress,
       status: status || "PENDING",
     });
 
-    return res.status(201).json({
-      success: true,
-      data: order,
-    });
+    return res.status(201).json({ success: true, data: order });
   } catch (error) {
     return next(error);
   }
