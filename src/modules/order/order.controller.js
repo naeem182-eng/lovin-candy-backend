@@ -30,7 +30,7 @@ export const createOrder = async (req, res, next) => {
           quantity: item.quantity,
           imageUrl: item.imageUrl,
           isCustom: true,
-          customDetails: item.details || {}
+          customDetails: item.customDetails || null
         });
       } else {
         const productInfo = dbProducts.find(p => p._id.toString() === item.product_id.toString());
@@ -78,10 +78,7 @@ export const updateOrder = async (req, res, next) => {
     const { status } = req.body;
 
     if (!status) {
-      return res.status(400).json({
-        success: false,
-        message: "Status is required",
-      });
+      return res.status(400).json({ success: false, message: "Status is required" });
     }
 
     const validStatuses = ["PENDING", "IN-TRANSIT", "DELIVERED", "CANCELLED"];
@@ -93,31 +90,27 @@ export const updateOrder = async (req, res, next) => {
     }
 
     if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid order id",
-      });
+      return res.status(400).json({ success: false, message: "Invalid order id" });
     }
 
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
       { status },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
 
     if (!updatedOrder) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
 
     if (status === "DELIVERED") {
-  for (const item of updatedOrder.items) {
-    await Product.findByIdAndUpdate(item.product_id, {
-      $inc: { popularity_score: POPULARITY_SCORE.ORDER_SUCCESS },
-    });
-    }
+      for (const item of updatedOrder.items) {
+        if (item.product_id) {
+          await Product.findByIdAndUpdate(item.product_id, {
+            $inc: { popularity_score: POPULARITY_SCORE.ORDER_SUCCESS },
+          });
+        }
+      }
     }
 
     return res.status(200).json({
@@ -167,11 +160,7 @@ export const getMyOrders = async (req, res, next) => {
     const userId = req.user.id;
 
     const orders = await Order.find({ user_id: userId })
-    .populate({
-        path: 'items.product_id',
-        select: 'imageUrl'
-      })
-    .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

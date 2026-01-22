@@ -147,7 +147,7 @@ Content-Type: application/json
 }
 
 ### Delete Order Test
-DELETE http://localhost:3000/api/orders/69706991a0cdea794a58dcd0
+DELETE http://localhost:3000/api/orders/69724e86356ff422b650f72d
 Authorization: Bearer {{token}}
 
 ### Update Order Status

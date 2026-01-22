@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema ({
       imageUrl: String,
       quantity: { type: Number, required: true, min: 1 },
       isCustom: { type: Boolean, default: false },
+      customDetails: { type: mongoose.Schema.Types.Mixed }
     }
   ],
   total_price: { type: Number, required: true },
