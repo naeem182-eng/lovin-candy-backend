@@ -292,3 +292,27 @@ export const updateProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ success: false, message: "Invalid user id" });
+    }
+
+    if (req.user?.id === id) {
+      return res.status(400).json({ success: false, message: "You cannot delete your own account" });
+    }
+
+    const deleted = await User.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    return res.status(200).json({ success: true, message: "User deleted" });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAddress, createUser, delAddress, getUsers, login, me, register, updateAddress, updateProfile } from "../modules/users/users.controller.js";
+import { createAddress, createUser, delAddress, getUsers, login, me, register, updateAddress, updateProfile, deleteUser } from "../modules/users/users.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js";
 
@@ -29,3 +29,7 @@ router.delete("/address", auth, delAddress);
 router.get("/", auth, isAdmin, getUsers);
 
 router.delete("/:id", auth, isAdmin, delAddress);
+
+router.get("/", auth, isAdmin, getUsers);
+
+router.delete("/:id", auth, isAdmin, deleteUser);
