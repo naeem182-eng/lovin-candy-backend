@@ -126,7 +126,7 @@ Authorization: Bearer {{token}}
 {
     "items": [
         {
-            "product_id": "697045a65656ead08646bc11",
+            "product_id": "6971f0adc33374ad5c1ddd0c",
             "quantity": 3
         }]
 }

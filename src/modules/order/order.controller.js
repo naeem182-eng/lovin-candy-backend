@@ -16,8 +16,20 @@ export const createOrder = async (req, res, next) => {
       });
     }
 
-    const productIds = items.map((item) => item.product_id);
-    const dbProducts = await Product.find({ _id: { $in: productIds } });
+    const productIds = items.map((item) => {
+  if (!mongoose.Types.ObjectId.isValid(item.product_id)) {
+    throw {
+      status: 400,
+      message: `Invalid product_id: ${item.product_id}`,
+    };
+  }
+  return item.product_id;
+});
+
+const dbProducts = await Product.find({
+  _id: { $in: productIds },
+});
+
 
     let total_price = 0;
     const finalItems = [];
