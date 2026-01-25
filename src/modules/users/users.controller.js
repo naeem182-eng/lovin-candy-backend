@@ -109,6 +109,8 @@ export const delAddress = async (req, res, next) => {
   }
 };
 
+
+
 export const getAddress = async (req, res, next) => {
   try {
     const { userId } = req.params; // ดึงมาจากข้อมูล 1 คน?
@@ -303,7 +305,7 @@ export const deleteUser = async (req, res, next) => {
     }
 
     if (req.user?.id === id) {
-      return res.status(400).json({ success: false, message: "You cannot delete your own account" });
+      return res.status(400).json({ success: false, message: "You can't delete your own account." });
     }
 
     const deleted = await User.findByIdAndDelete(id);
