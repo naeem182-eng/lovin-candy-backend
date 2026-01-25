@@ -109,6 +109,8 @@ export const delAddress = async (req, res, next) => {
   }
 };
 
+
+
 export const getAddress = async (req, res, next) => {
   try {
     const { userId } = req.params; // ดึงมาจากข้อมูล 1 คน?
@@ -288,6 +290,30 @@ export const updateProfile = async (req, res, next) => {
     );
 
     res.status(200).json({ success: true, data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ success: false, message: "Invalid user id" });
+    }
+
+    if (req.user?.id === id) {
+      return res.status(400).json({ success: false, message: "You can't delete your own account." });
+    }
+
+    const deleted = await User.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    return res.status(200).json({ success: true, message: "User deleted" });
   } catch (error) {
     next(error);
   }
