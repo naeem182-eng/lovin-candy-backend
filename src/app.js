@@ -19,11 +19,17 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+//health chech
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+// Routes
 app.use("/api", apiRoutes);
 
 app.use("/api/categories", categoryRoutes);
 
-
+// 404 Handler
 app.use((req, res, next) => {
   const error = new Error (`Not found: ${req.method} ${req.originalUrl}`)
   error.name = "NotFoundError"
@@ -31,6 +37,7 @@ app.use((req, res, next) => {
   next(error);
 })
 
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
