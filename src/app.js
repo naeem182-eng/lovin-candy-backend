@@ -7,10 +7,12 @@ export const app = express();
 
 const corsOptions = {
   origin: [
+
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
-    "https://lovin-candy-web.vercel.app"
+    "https://hayati-sweet.vercel.app"
+
   ],
   credentials: true // allow cookies to be sent
 };
