@@ -1,21 +1,22 @@
+### Get users
 GET http://localhost:3000/api/users
 
-###
+### create users
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-    "username": "test5",
-    "email": "test5@example.com",
-    "password": "test5",
-    "first_name": "test5",
-    "last_name": "test5",
-    "address": "test5",
-    "role": "USER"
+    "username": "hayati",
+    "email": "hayati@example.com",
+    "password": "hayati",
+    "first_name": "hayati",
+    "last_name": "hayati",
+    "address": "hayati",
+    "role": "ADMIN"
 
 }
 
-###
+### get products
 GET http://localhost:3000/api/products
 
 ### create address
@@ -41,3 +42,33 @@ Content-Type: application/json
 DELETE http://localhost:3000/api/users/address
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjhhNWEyN2RjOTBhMzU3YzM1Y2ZiOSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4OTMxOTU3LCJleHAiOjE3Njk1MzY3NTd9.g_RKmlidxoXklfmx_MOPQ-R5QKu8yiYrmyQ6ftG5zHA
 Content-Type: application/json
+
+
+###
+POST /api/auth/register
+Content-Type: application/json
+
+{
+    "username": "hayati",
+    "email": "hayati@example.com",
+    "password": "hayati",
+    "first_name": "hayati",
+    "last_name": "hayati",
+    "address": "hayati",
+    "role": "ADMIN"
+
+}
+
+###
+POST https://hayati-sweet-backend.onrender.com/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "hayati_ad",
+  "email": "hayati@examplead.com",
+  "password": "hayati",
+  "first_name": "hayati",
+  "last_name": "hayati",
+  "address": "hayati",
+  "role": "ADMIN"
+}
